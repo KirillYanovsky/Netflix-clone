@@ -7,8 +7,8 @@ on:
 
 
 jobs:
-  build:
-    name: Build
+  build-analyze-scan:
+    name: build-analyze-scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -42,3 +42,13 @@ jobs:
          docker push yankey/netflix:latest
         env:
          DOCKER_CLI_ACI: 1 
+  deploy:    
+    needs: build-analyze-scan
+    runs-on: [self-hosted]  
+    steps:
+      - name: Pull the docker image
+        run: docker pull yankey/netflix:latest
+      - name: Trivy image scan
+        run: trivy image yankey/netflix:latest
+      - name: Run the container netflix
+        run: docker run -d --name netflix -p 8081:80 yankey/netflix:latest       
