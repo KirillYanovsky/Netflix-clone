@@ -49,8 +49,6 @@ jobs:
       - name: Pull the docker image
         run: |
           docker pull yankey/netflix:latest
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Trivy image scan
-        run: trivy image yankey/netflix:latest
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}      
       - name: Run the container netflix
         run: docker run -d --name netflix -p 8081:80 yankey/netflix:latest       
